@@ -1,22 +1,21 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Dashboard from './components/Dashboard';
+import AddTask from './components/AddTask';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <h1>Task Nest</h1>
+        <p>Welcome to the Task Nest task managing dashboard!</p>
+      <Router>
+          <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/add-task" element={<AddTask />} />
+          </Routes>
+      </Router>
+      </div>
+    
   );
 }
 
