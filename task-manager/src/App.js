@@ -5,28 +5,52 @@ import AddTask from './components/AddTask';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+//DEBUGGING:
+axios.defaults.withCredentials = true;
+
+
 function App() {
     const api = axios.create({
-        baseURL: 'http://localhost:5000/api', // Adjust if needed (e.g., 'http://localhost:5000/api')
+        baseURL: 'http://localhost:5001/api', // Adjust if needed (e.g., 'http://localhost:5000/api')
     });
+
+    const addBoard = async (board) => {
+        try {
+          const res = await api.post('/boards', board);
+          const updated = await api.get('/boards');
+          setBoards(updated.data);
+        } catch (err) {
+          console.error('Error adding board:', err);
+        }
+      };
+      
+
     const [boards, setBoards] = useState([]);
     useEffect(() => {
-        api.get('/boards')
-          .then(res => setBoards(res.data))
-          .catch(err => console.error('Error fetching boards', err));
-    }, [boards, api]);
-    //export const addBoard = () => async (){} or something to optimize?
-    async function addBoard(board){
-        console.log(board);
-        try {
-            const res = await api.post('/boards', board);
-            const newBoards = [...boards, res.data];
-            setBoards(newBoards);
-            console.log(boards)
-        } catch (e) {
-            console.error('Error creating board:', e);
-        }
-    }
+        const fetchBoards = async () => {
+          try {
+            const res = await api.get('/boards');
+            if (res.data.length === 0) {
+              
+              await addBoard({
+                name: "My First Board",
+                boards: [
+                  {
+                    title: "To Do",
+                    items: []
+                  }
+                ]
+              });
+            } else {
+              setBoards(res.data);
+            }
+          } catch (err) {
+            console.error('Error fetching boards:', err);
+          }
+        };
+      
+        fetchBoards();
+      }, []);
 
     return (
     <div className="App">

@@ -6,15 +6,23 @@ const apiRoutes = require('./routes/api');
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
 // ==== Configuration ====
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const MONGO_URI = 'mongodb://localhost:27017/taskboarddb'; // Adjust to your DB name
 
 // ==== Middleware ====
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
+//DEBUGGING: moved CORS handling middlware above static file handling
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 

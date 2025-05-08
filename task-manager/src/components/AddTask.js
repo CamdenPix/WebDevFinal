@@ -24,7 +24,7 @@ function AddTask() {
     try {
 
       //temporarily hardcoding a board, if time permits, change to real board later
-      const res = await axios.get('http://localhost:5000/api/boards');
+      const res = await axios.get('http://localhost:5001/api/boards');
       
 
       const firstBoard = res.data[0];
@@ -39,7 +39,7 @@ function AddTask() {
       // Add to first column 
       firstBoard.boards[0].items.push(newTask);
 
-      await axios.put('http://localhost:5000/api/boards', {
+      await axios.put('http://localhost:5001/api/boards', {
 
         name: firstBoard._id,
         ...firstBoard
@@ -48,6 +48,7 @@ function AddTask() {
 
       alert('Task added!');
       navigate('/');
+      window.location.reload();
     
     } 
     
@@ -93,7 +94,7 @@ function AddTask() {
       </div>
 
     </div>
-    
+
   );
 }
 

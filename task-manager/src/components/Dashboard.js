@@ -17,27 +17,37 @@ function Dashboard({ addBoard, taskBoards }) {
 
       <div className="dashboard">
 
-        {taskBoards.map((board, index) => (
-          <BoardColumn key={index} board={board} />
-        ))}
+      {taskBoards.length > 0 &&
+        taskBoards[0].boards.map((col, i) => (
+
+          <BoardColumn key={i} column={col} />
+
+        ))
+      }
+
 
       </div>
 
-      <button onClick={() => addBoard({
-        name: "My Project Board",
-        boards: [
-          {
-            title: "To Do",
-            items: [
+      <button onClick={async () => {
+          await addBoard({
+            name: "My Project Board",
+            boards: [
               {
-                taskName: "Set up backend",
-                taskDescription: "Install Express, Mongoose, etc.",
-                date: "2025-05-07"
+                title: "To Do",
+                items: [
+                  {
+                    taskName: "Set up backend",
+                    taskDescription: "Install Express, Mongoose, etc.",
+                    date: "2025-05-07"
+                  }
+                ]
               }
             ]
-          }
-        ]
-      })}>Add Board</button>
+          });
+          window.location.reload(); //DEBUGGING: forcing dashboard to refresh after every instance of adding a board
+        }}>
+          Add Board
+        </button>
 
       <button onClick={handleAddTask}>Add Task</button>
     </div>
