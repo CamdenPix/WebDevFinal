@@ -16,3 +16,21 @@
 .App-link {
   color: #61dafb;
 }
+
+.Groups {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.Groups > * {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.Group {
+    display: flex;
+    flex-direction: column;
+}

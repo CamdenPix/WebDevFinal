@@ -7,7 +7,7 @@ function AddTask() {
   return (
     <div>
             <h2>Add Task</h2>
-            <form>
+            <div>
                 <label>
                     Task Name:
                     <input type="text" name="taskName" />
@@ -18,8 +18,8 @@ function AddTask() {
                     <textarea name="description"></textarea>
                 </label>
                 <br />
-                <button type="submit">Add Task</button>
-            </form>
+                <button id="addTask">Add Task</button>
+            </div>
         </div>
     
   )

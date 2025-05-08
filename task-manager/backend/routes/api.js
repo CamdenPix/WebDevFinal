@@ -25,10 +25,9 @@ router.get('/boards', async (req, res) => {
  * Returns a specific board by name
  * GET /api/boards/:name
 **/
-router.get('/boards/:name', async (req, res) => {
+router.get('/boards/:_id', async (req, res) => {
     try {
-        //certainly hope req.params.name works
-        const board = await TaskBoard.findById(req.params.name);
+        const board = await TaskBoard.findById(req.params._id);
         if(!board)
             { return res.status(404).json({error:'Board not Found'}) };
         res.status(200).json(board);
@@ -59,7 +58,7 @@ router.post('/boards', async (req, res) => {
  */
 router.put('/boards', async (req, res) => {
     try {
-        const updatedSong = await TaskBoard.findByIdAndUpdate(req.body._id, req.body, {
+        const updatedSong = await TaskBoard.findByIdAndUpdate(req.body.name, req.body, {
             new: true,
             runValidators: true
         });
