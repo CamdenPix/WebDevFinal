@@ -26,10 +26,9 @@ function Dashboard({ addBoard, taskBoards }) {
     await addBoard({
       name: boardName.trim(),
       boards: [
-        {
-          title: 'To Do',
-          items: []
-        }
+        { title: "To Do", items: [] },
+        { title: "In Progress", items: [] },
+        { title: "Done", items: [] }
       ]
     });
 
@@ -46,7 +45,14 @@ function Dashboard({ addBoard, taskBoards }) {
       const res = await axios.get(`http://localhost:5001/api/boards/${selectedBoardId}`);
       const board = res.data;
 
-      board.boards[0].items.push({
+      const todoColumn = board.boards.find(col => col.title.toLowerCase() === 'to do');
+
+      if (!todoColumn) {
+        alert('No "To Do" column found on this board.');
+        return;
+      }
+      
+      todoColumn.items.push({
         taskName,
         taskDescription,
         date: taskDate
@@ -70,6 +76,36 @@ function Dashboard({ addBoard, taskBoards }) {
     }
 
   };
+
+  const handleMoveTask = async (boardIndex, columnIndex, taskIndex, direction) => {
+    try {
+
+      const board = { ...taskBoards[boardIndex] };
+      const sourceCol = board.boards[columnIndex];
+      const targetCol = board.boards[columnIndex + direction];
+  
+      if (!sourceCol || !targetCol) return;
+  
+      const [movedTask] = sourceCol.items.splice(taskIndex, 1); //TASK DELETION 
+  
+      targetCol.items.push(movedTask); //TASK STATUS SHIFTER
+  
+      await axios.put('http://localhost:5001/api/boards', {
+
+        _id: board._id,
+        ...board
+
+      });
+  
+      window.location.reload(); //a refresh is required here since there's a PUT request, possible dynamic integration so no hard refresh necesary?
+    } 
+    
+    catch (err) {
+      console.error('Error altering task status: ', err);
+    }
+
+  };
+  
 
 
 
@@ -118,9 +154,21 @@ function Dashboard({ addBoard, taskBoards }) {
 
               </div>
 
-              {board.boards.map((col, i) => (
-                <BoardColumn key={i} column={col} />
-              ))}
+              
+              <div className="board-columns">
+                {board.boards.map((col, i) => (
+
+                  <BoardColumn
+                    key={i}
+                    column={col}
+                    columnIndex={i}
+                    boardIndex={index}
+                    onMoveTask={handleMoveTask}
+                  />
+
+                ))}
+
+              </div>
 
             </div>
 
@@ -184,11 +232,20 @@ function Dashboard({ addBoard, taskBoards }) {
             onChange={(e) => setTaskDate(e.target.value)}
           />
 
-          <select value={selectedBoardId} onChange={(e) => setSelectedBoardId(e.target.value)}>
+          <select
+            value={selectedBoardId}
+            onChange={(e) => {
+
+              setSelectedBoardId(e.target.value);
+
+            }}
+          >
+
             <option value="" disabled>Select a board</option>
             {taskBoards.map(board => (
               <option key={board._id} value={board._id}>{board.name}</option>
             ))}
+
           </select>
 
           <div className="modal-actions">

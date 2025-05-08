@@ -134,3 +134,10 @@ button:hover {
   font-style: italic;
   color: #666;
 }
+
+.board-columns {
+  display: flex;
+  gap: 16px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
