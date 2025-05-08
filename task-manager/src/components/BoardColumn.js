@@ -4,7 +4,7 @@ import '../App.css';
 
 //BoardColumn Component
 //This component displays an overall task group column (i.e. To Do) and loops over tasks within it
-function BoardColumn({ column, columnIndex, boardIndex, onMoveTask }) {
+function BoardColumn({ column, columnIndex, boardIndex, onMoveTask, onDeleteTask }) {
 
   const items = Array.isArray(column?.items) ? column.items : [];
 
@@ -26,6 +26,8 @@ function BoardColumn({ column, columnIndex, boardIndex, onMoveTask }) {
             task={item}
             onMoveLeft={columnIndex > 0 ? () => onMoveTask(boardIndex, columnIndex, taskIndex, -1) : null}
             onMoveRight={columnIndex < 2 ? () => onMoveTask(boardIndex, columnIndex, taskIndex, 1) : null}
+            onDelete={() => onDeleteTask(boardIndex, columnIndex, taskIndex)}
+
           />
 
         ))

@@ -4,7 +4,7 @@ import '../App.css';
 //Specfic individual TaskCard component
 //This component showcases one specific task and provides the user the option to change the task status
 
-function TaskCard({ task, onMoveLeft, onMoveRight }) {
+function TaskCard({ task, onMoveLeft, onMoveRight, onDelete }) {
 
   return (
 
@@ -16,10 +16,11 @@ function TaskCard({ task, onMoveLeft, onMoveRight }) {
 
       <small>Due: {task.date}</small>
 
-      <div className="task-actions">
+      <div className="task-card-actions">
 
-        {onMoveLeft && <button onClick={onMoveLeft}>&larr;</button>}
-        {onMoveRight && <button onClick={onMoveRight}>&rarr;</button>}
+        {onMoveLeft && <button onClick={onMoveLeft}>&uarr;</button>}
+        {onDelete && <button className="delete-button" onClick={onDelete}>🗑️</button>}
+        {onMoveRight && <button onClick={onMoveRight}>&darr;</button>}
 
       </div>
 

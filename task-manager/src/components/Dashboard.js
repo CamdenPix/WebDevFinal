@@ -105,6 +105,29 @@ function Dashboard({ addBoard, taskBoards }) {
     }
 
   };
+
+  const handleDeleteTask = async (boardIndex, columnIndex, taskIndex) => {
+    try {
+
+      const board = { ...taskBoards[boardIndex] };
+      board.boards[columnIndex].items.splice(taskIndex, 1);
+  
+      await axios.put('http://localhost:5001/api/boards', {
+
+        _id: board._id,
+        ...board
+
+      });
+  
+      window.location.reload(); //current hard refresh, possible dynamic inegration? 
+    } 
+    
+    catch (err) {
+      console.error('Failed to delete task:', err);
+    }
+
+  };
+  
   
 
 
@@ -132,7 +155,7 @@ function Dashboard({ addBoard, taskBoards }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>{board.name}</h2>
 
-                <button onClick={async () => {
+                <button className="delete-button" onClick={async () => {
 
                   if (window.confirm(`Delete board "${board.name}"?`)) {
                     
@@ -149,7 +172,7 @@ function Dashboard({ addBoard, taskBoards }) {
 
                 }}>
 
-                  Delete
+                  Delete Board
                 </button>
 
               </div>
@@ -164,6 +187,7 @@ function Dashboard({ addBoard, taskBoards }) {
                     columnIndex={i}
                     boardIndex={index}
                     onMoveTask={handleMoveTask}
+                    onDeleteTask={handleDeleteTask}
                   />
 
                 ))}
