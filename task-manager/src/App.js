@@ -30,20 +30,7 @@ function App() {
         const fetchBoards = async () => {
           try {
             const res = await api.get('/boards');
-            if (res.data.length === 0) {
-              
-              await addBoard({
-                name: "My First Board",
-                boards: [
-                  {
-                    title: "To Do",
-                    items: []
-                  }
-                ]
-              });
-            } else {
-              setBoards(res.data);
-            }
+            setBoards(res.data);
           } catch (err) {
             console.error('Error fetching boards:', err);
           }
