@@ -58,17 +58,17 @@ router.post('/boards', async (req, res) => {
  */
 router.put('/boards', async (req, res) => {
     try {
-        const updatedSong = await TaskBoard.findByIdAndUpdate(req.body.name, req.body, {
+        const updatedBoard = await TaskBoard.findByIdAndUpdate(req.body._id, req.body, {
             new: true,
             runValidators: true
         });
   
-        if (!updatedSong) 
-            {return res.status(404).json({ error: 'Song not found' });}
+        if (!updatedBoard) 
+            {return res.status(404).json({ error: 'Board not found' });}
   
-        res.status(204).end();
+        res.status(200).json(updatedBoard);
     } catch (err) {
-        console.error('Error updating song:', err);
+        console.error('Error updating board:', err);
         res.status(400).json({ error: 'Invalid update data' });
     }
 });
