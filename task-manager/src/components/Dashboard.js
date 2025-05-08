@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BoardColumn from './BoardColumn';
 import '../App.css';
+import axios from 'axios';
 
 //Dashboard Component
 //Displays general dashboard layout and calls on separate BoardColumns and passes info to each.
@@ -17,13 +18,34 @@ function Dashboard({ addBoard, taskBoards }) {
 
       <div className="dashboard">
 
-      {taskBoards.length > 0 &&
-        taskBoards[0].boards.map((col, i) => (
+      {taskBoards.map((board, index) => (
+        <div key={index}>
 
-          <BoardColumn key={i} column={col} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-        ))
-      }
+        <h2>{board.name}</h2>
+        
+        
+        <button onClick={async () => {
+          try {
+            await axios.delete(`http://localhost:5001/api/boards/${board._id}`);
+            window.location.reload();
+          } catch (err) {
+            console.error('Failed to delete board:', err);
+          }
+        }}>
+          Delete
+        </button>
+      </div>
+
+
+          {board.boards.map((col, i) => (
+            <BoardColumn key={i} column={col} />
+          ))}
+
+        </div>
+
+      ))}
 
 
       </div>

@@ -77,16 +77,25 @@ router.put('/boards', async (req, res) => {
  * Delete a TaskBoard
  * DELETE /api/boards/:name
  */
-router.delete('/songs/:id', async (req, res) => {
+router.delete('/boards/:id', async (req, res) => {
     try {
-        const result = await TaskBoard.findByIdAndDelete(req.params.name);
-        if (!result) 
-            {return res.status(404).json({ error: 'Song not found' });}
-        res.status(204).end();
+        //DEBUGGING DELETE BUTTON
+      console.log("Attempting to delete board with ID:", req.params.id);
+  
+      const board = await TaskBoard.findByIdAndDelete(req.params.id); // ✅ correct model
+  
+      if (!board) {
+        console.log("Board not found");
+        return res.status(404).json({ message: 'Board not found' });
+      }
+  
+      console.log("Board deleted:", board);
+      res.status(200).json({ message: 'Board deleted successfully' });
     } catch (err) {
-      console.error('Error deleting Board:', err);
-      res.status(400).json({ error: 'Invalid TaskBoard Name' });
+      console.error('Error deleting board:', err);
+      res.status(500).json({ message: 'Server error', error: err.message });
     }
-});
+  });
+  
 
 module.exports = router;
